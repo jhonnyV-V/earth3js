@@ -22,7 +22,7 @@ renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 
 const earthGroup = new THREE.Group();
 //tilt 23.4 degrees and convert it to radians
-// earthGroup.rotation.z = -23.4 * Math.PI / 180;
+earthGroup.rotation.z = -23.4 * Math.PI / 180;
 scene.add(earthGroup);
 new OrbitControls(camera, renderer.domElement);
 const detail = 12;
@@ -44,16 +44,13 @@ const moonMaterial = new THREE.MeshPhongMaterial({
 const moonMesh = new THREE.Mesh(geometry, moonMaterial);
 moonMesh.position.set(-3, 1, 0);
 moonMesh.scale.setScalar(0.3);
-earthMesh.rotation.z = -23.4 * Math.PI / 180;
 earthGroup.add(earthMesh);
-earthGroup.add(moonMesh);
 
 const lightsMat = new THREE.MeshBasicMaterial({
   map: loader.load("./textures/03_earthlights1k.jpg"),
   blending: THREE.AdditiveBlending,
 });
 const lightsMesh = new THREE.Mesh(geometry, lightsMat);
-lightsMesh.rotation.z = -23.4 * Math.PI / 180;
 earthGroup.add(lightsMesh);
 
 const cloudsMat = new THREE.MeshStandardMaterial({
@@ -66,13 +63,11 @@ const cloudsMat = new THREE.MeshStandardMaterial({
 });
 const cloudsMesh = new THREE.Mesh(geometry, cloudsMat);
 cloudsMesh.scale.setScalar(1.003);
-cloudsMesh.rotation.z = -23.4 * Math.PI / 180;
 earthGroup.add(cloudsMesh);
 
 const fresnelMat = getFresnelMat();
 const glowMesh = new THREE.Mesh(geometry, fresnelMat);
 glowMesh.scale.setScalar(1.01);
-glowMesh.rotation.z = -23.4 * Math.PI / 180;
 earthGroup.add(glowMesh);
 
 const stars = getStarfield({ numStars: 20_000 });
@@ -82,6 +77,7 @@ const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
 sunLight.position.set(-2, 0.5, 1.5);
 moonMesh.add(sunLight);
 scene.add(sunLight);
+scene.add(moonMesh);
 
 
 function orbitBody(body: THREE.Mesh, orbiter: THREE.Mesh, speed: number, distanceFromBody: number, time: number) {
